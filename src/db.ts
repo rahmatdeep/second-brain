@@ -1,10 +1,14 @@
 import mongoose, { model, Schema, Types } from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 (async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://admin:admin@cluster0.fjvxy.mongodb.net/second-brain",
-    );
+    if (!process.env.MONGO_CONNECTION) {
+      return;
+    }
+    await mongoose.connect(process.env.MONGO_CONNECTION);
+
     console.log("Connected to the db");
   } catch (e) {
     console.log("Failed to connect to the db ", e);
