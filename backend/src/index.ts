@@ -1,11 +1,12 @@
 import express from "express";
-import { userModel, contentModel } from "./db";
-import bcrypt from "bcrypt";
+import { userModel, contentModel, linkModel } from "./db";
+import bcrypt, { hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { CustomRequest, ResponseCode, signupSchema } from "./types";
 import dotenv from "dotenv";
 import { userMiddleware } from "./middleware";
 import e from "express";
+import { random } from "./utils";
 dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET as string;
@@ -142,6 +143,72 @@ app
       });
     }
   });
+
+app.post(
+  "/api/v1/brain/share",
+  userMiddleware,
+  async (req: CustomRequest, res) => {
+    const share = req.body.share;
+    if (share) {
+      const alreadyExsists = await linkModel.findOne({
+        userId: req.userId,
+      });
+      if (alreadyExsists) {
+        res.status(ResponseCode.AlreadyExists).json({
+          message: `share/${alreadyExsists.hash}`,
+        });
+        return;
+      }
+      const link = await linkModel.create({
+        userId: req.userId,
+        hash: random(10),
+      });
+      res.json({
+        message: `/share/${link.hash}`,
+      });
+    } else {
+      await linkModel.deleteOne({
+        userId: req.userId,
+      });
+      res.json({
+        message: "link removed",
+      });
+    }
+  },
+);
+
+app.get("/api/v1/brain/:shareLink", async (req: CustomRequest, res) => {
+  const hash = req.params.shareLink;
+
+  const link = await linkModel.findOne({ hash });
+
+  if (!link) {
+    res.status(ResponseCode.InputError).json({
+      message: "Incorrect Inputs",
+    });
+    return;
+  }
+
+  const content = await contentModel.findOne({
+    userId: link.userId,
+  });
+
+  const user = await userModel.findOne({
+    _id: link.userId,
+  });
+
+  if (!user) {
+    res.status(ResponseCode.InputError).json({
+      message: "Invalid Inputs",
+    });
+    return;
+  }
+
+  res.json({
+    username: user.username,
+    content,
+  });
+});
 
 app.listen(3000, () => {
   console.log("server is running on port 3000");

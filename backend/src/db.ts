@@ -29,10 +29,16 @@ const contentSchema = new Schema({
   tags: [{ type: Types.ObjectId, ref: "Tag" }],
   userId: { type: Types.ObjectId, ref: "User", required: true },
 });
-const tagSchema = new mongoose.Schema({
+const tagSchema = new Schema({
   title: { type: String, required: true, unique: true },
+});
+
+const linkSchema = new Schema({
+  hash: String,
+  userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
 });
 
 export const userModel = model("User", userSchema);
 export const contentModel = model("Content", contentSchema);
 export const tagModel = model("Tag", tagSchema);
+export const linkModel = model("Link", linkSchema);

@@ -28,3 +28,7 @@ export const signupSchema = z.object({
       "Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.",
     ),
 });
+
+// export const createContentSchema = z.object({
+
+// })
