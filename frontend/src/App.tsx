@@ -5,18 +5,20 @@ import { Card } from "./components/Card";
 import { CreateContentModel } from "./components/CreateContentModel";
 import { PlusIcon } from "./icons/PlusIcon";
 import { ShareIcon } from "./icons/ShareIcon";
+import { Sidebar } from "./components/Sidebar";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
-      <CreateContentModel
-        open={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-        }}
-      />
-      <div className="p-4">
+      <Sidebar />
+      <div className="p-4 ml-72 min-h-screen bg-gray-100">
+        <CreateContentModel
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+          }}
+        />
         <div className="flex justify-end gap-4">
           <Button
             variant="primary"
