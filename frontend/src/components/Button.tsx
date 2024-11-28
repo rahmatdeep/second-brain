@@ -6,6 +6,7 @@ interface ButtonProps {
   variant: ButtonVariants;
   text: string;
   startIcon?: ReactElement;
+  onClick?: () => void;
 }
 
 type Variants = Record<ButtonVariants, string>;
@@ -17,9 +18,12 @@ const variantClasses: Variants = {
 
 const defaultClasses = "px-4 py-2 rounded-md font-light flex gap-2";
 
-export function Button({ variant, text, startIcon }: ButtonProps) {
+export function Button({ variant, text, startIcon, onClick }: ButtonProps) {
   return (
-    <button className={`${defaultClasses} ${variantClasses[variant]}`}>
+    <button
+      onClick={onClick}
+      className={`${defaultClasses} ${variantClasses[variant]}`}
+    >
       <div className="self-center">{startIcon}</div>
       {text}
     </button>
