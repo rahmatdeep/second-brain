@@ -12,7 +12,7 @@ export function Dashboard() {
   return (
     <>
       <Sidebar />
-      <div className="p-4 ml-72 min-h-screen bg-gray-100">
+      <div className="p-6 ml-60 min-h-screen bg-gray-100">
         <CreateContentModel
           open={modalOpen}
           onClose={() => {
@@ -34,7 +34,7 @@ export function Dashboard() {
             startIcon={<ShareIcon />}
           />
         </div>
-        <div className="flex gap-4">
+        <div className="pt-4 flex gap-4">
           <Card
             title="First tweet"
             type="twitter"
