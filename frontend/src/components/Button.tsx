@@ -7,6 +7,8 @@ interface ButtonProps {
   text: string;
   startIcon?: ReactElement;
   onClick?: () => void;
+  fullWidth?: boolean;
+  isLoading?: boolean;
 }
 
 type Variants = Record<ButtonVariants, string>;
@@ -18,14 +20,22 @@ const variantClasses: Variants = {
 
 const defaultClasses = "px-4 py-2 rounded-md font-light flex gap-2";
 
-export function Button({ variant, text, startIcon, onClick }: ButtonProps) {
+export function Button({
+  variant,
+  text,
+  startIcon,
+  onClick,
+  fullWidth,
+  isLoading,
+}: ButtonProps) {
   return (
     <button
       onClick={onClick}
-      className={`${defaultClasses} ${variantClasses[variant]}`}
+      className={`${defaultClasses} ${variantClasses[variant]} ${fullWidth ? "w-full" : ""} ${isLoading ? "opacity-45" : ""}`}
+      disabled={isLoading}
     >
-      <div className="self-center">{startIcon}</div>
-      {text}
+      {startIcon && <div className="self-center">{startIcon}</div>}
+      <div className="mr-auto ml-auto">{text}</div>
     </button>
   );
 }
