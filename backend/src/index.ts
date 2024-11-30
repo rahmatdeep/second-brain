@@ -7,11 +7,14 @@ import dotenv from "dotenv";
 import { userMiddleware } from "./middleware";
 import e from "express";
 import { random } from "./utils";
+import cors from "cors";
 dotenv.config();
 
 const jwtSecret = process.env.JWT_SECRET as string;
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
