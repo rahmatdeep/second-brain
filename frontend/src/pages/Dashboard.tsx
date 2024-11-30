@@ -6,9 +6,13 @@ import { CreateContentModel } from "../components/CreateContentModel";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
+import { useContents } from "../hooks/useContent";
+import axios from "axios";
+import { BACKEND_URL } from "../../config";
 
 export function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { contents } = useContents();
   return (
     <>
       <Sidebar />
@@ -32,19 +36,29 @@ export function Dashboard() {
             variant="secondary"
             text="Share Brain"
             startIcon={<ShareIcon />}
+            onClick={async () => {
+              const response = await axios.post(
+                `${BACKEND_URL}/api/v1/brain/share`,
+                {
+                  share: true,
+                },
+                {
+                  headers: {
+                    Authorization: localStorage.getItem("token"),
+                  },
+                },
+              );
+              const shareUrl = `http://localhost:5173${response.data.message}`;
+              navigator.clipboard.writeText(shareUrl);
+              console.log(shareUrl);
+              alert(shareUrl);
+            }}
           />
         </div>
-        <div className="pt-4 flex gap-4">
-          <Card
-            title="First tweet"
-            type="twitter"
-            link="https://x.com/SahilR660620/status/1861230310148481365"
-          />
-          <Card
-            title="First video"
-            type="youtube"
-            link="https://www.youtube.com/embed?v=EdLhvHBhnG8"
-          />
+        <div className="pt-4 flex gap-4 flex-wrap">
+          {contents.map(({ type, link, title }) => (
+            <Card title={title} type={type} link={link} />
+          ))}
         </div>
       </div>
     </>
