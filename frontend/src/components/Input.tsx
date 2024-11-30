@@ -1,9 +1,9 @@
 export function Input({
-  onChange,
   placeHolder,
+  reference,
 }: {
-  onChange?: () => void;
   placeHolder: string;
+  reference?: any;
 }) {
   return (
     <div>
@@ -11,7 +11,7 @@ export function Input({
         placeholder={placeHolder}
         type="text"
         className="px-4 py-2 border rounded m-2"
-        onChange={onChange}
+        ref={reference}
       />
     </div>
   );
